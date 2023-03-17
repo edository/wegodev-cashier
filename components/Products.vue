@@ -1,17 +1,44 @@
 <template>
   <v-row>
-    <v-col cols="2" v-for="(product, index) in products" :key="index">
-      <v-card :title="product.title" :ripple="true">
-        <v-card-actions>
-          <v-img
-            :src="require(`@/assets/images/products/${product.thumbnail}`)"
-          ></v-img>
-        </v-card-actions>
-        <v-card-text align="center" class="product-title">
-          {{ product.title }}
-        </v-card-text>
-      </v-card>
-    </v-col>
+    <v-row>
+      <v-col cols="10"> Search </v-col>
+      <v-col cols="2">
+        <v-menu>
+          <template v-slot:activator="{ on: category }">
+            <v-btn v-on="category" color="primary"> Category </v-btn>
+          </template>
+
+          <v-list>
+            <v-list-item-group v-model="categoryId">
+              <v-list-item
+                v-for="(category, index) in categories"
+                :key="index"
+                :value="category.id"
+              >
+                <v-list-item-title>
+                  {{ category.title }}
+                </v-list-item-title>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-menu>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="2" v-for="(product, index) in filteredProducts" :key="index">
+        <v-card :title="product.title" :ripple="true">
+          <v-card-actions>
+            <v-img
+              :src="require(`@/assets/images/products/${product.thumbnail}`)"
+            ></v-img>
+          </v-card-actions>
+          <v-card-text align="center" class="product-title">
+            {{ product.title }}
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-row>
 </template>
 
@@ -19,6 +46,13 @@
 export default {
   data() {
     return {
+      categoryId: false,
+      categories: [
+        { id: false, title: 'All' },
+        { id: 1, title: 'Smartphone' },
+        { id: 2, title: 'Camera' },
+        { id: 3, title: 'TV' },
+      ],
       products: [
         {
           id: 1,
@@ -127,6 +161,15 @@ export default {
         },
       ],
     }
+  },
+  computed: {
+    filteredProducts() {
+      if (this.categoryId) {
+        return this.products.filter((s) => s.categoryId == this.categoryId)
+      }
+
+      return this.products
+    },
   },
 }
 </script>
