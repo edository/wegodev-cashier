@@ -1,10 +1,12 @@
 <template>
   <v-row>
     <v-col cols="8" class="frame-content px-6">
-      <products></products>
-      <products></products>
+      <product></product>
     </v-col>
-    <v-col cols="4" class="frame-content white"> ORDER SUMMARY </v-col>
+    <v-col cols="4" class="frame-content white">
+      ORDER
+      <order></order>
+    </v-col>
   </v-row>
 </template>
 
