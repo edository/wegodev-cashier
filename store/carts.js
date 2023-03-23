@@ -17,7 +17,7 @@ export const state = () => ({
 export const getters = {
     cartItems: (state, getters, rootState) => {
         return state.items.map(({ id, quantity }) => {
-            let product = rootState.products.products.find(product => product.id === id)
+            let product = rootState.products.products.find(product => product._id === id)
 
             return {
                 id: id,
@@ -59,7 +59,6 @@ export const mutations = {
             id: id,
             quantity: 1
         })
-        console.log(state.items)
     },
     incrementItem(state, id) {
         state.items.find(item => item.id === id).quantity++
