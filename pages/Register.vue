@@ -38,7 +38,15 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn @click="onSubmit()" color="primary">Register</v-btn>
+          <v-btn @click="onSubmit()" color="primary" :disabled="isDisabled">
+            <span v-if="!isDisabled">Register</span>
+            <!-- loading progress button -->
+            <v-progress-circular
+              v-else
+              color="primary"
+              indeterminate
+            ></v-progress-circular>
+          </v-btn>
         </v-card-actions>
       </v-card>
       <p>Kamu belum punya akun? <v-btn to="/login" plain>Login</v-btn></p>
@@ -51,6 +59,7 @@ export default {
   data() {
     return {
       emailExist: false,
+      isDisabled: false,
       form: {
         fullname: '',
         email: '',
@@ -62,7 +71,7 @@ export default {
         email: [
           (v) => !!v || 'Email is required',
           (v) => /.+@.+/.test(v) || 'Email invalid',
-          (v) => !!this.emailExist || 'Email already exist',
+          // (v) => !!this.emailExist || 'Email already exist',
         ],
         password: [
           (v) => !!v || 'Password is required',
@@ -81,19 +90,25 @@ export default {
       this.$axios
         .$post('http://localhost:3000/auth/check-email', this.form)
         .then((response) => {
-          console.log(response)
           this.emailExist = false
         })
         .catch((error) => {
           this.emailExist = true
-          console.log(error)
         })
     },
     onSubmit() {
+      this.isDisabled = true
+
       this.$axios
         .$post('http://localhost:3000/auth/register', this.form)
         .then((response) => {
-          console.log(response)
+          this.isDisabled = false
+
+          // redirect to login page
+          this.$router.push('/login')
+        })
+        .catch((error) => {
+          this.isDisabled = false
         })
     },
   },
