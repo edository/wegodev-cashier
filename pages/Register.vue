@@ -56,6 +56,7 @@
 
 <script>
 export default {
+  middleware: ['guest'],
   data() {
     return {
       emailExist: false,
@@ -67,7 +68,10 @@ export default {
         retype_password: '',
       },
       rules: {
-        fullname: [(v) => !!v || 'Fullname is required'],
+        // ini yang pake i18n dan objek
+        fullname: [
+          (v) => !!v || this.$t('FIELD_REQUIRED', { field: 'Nama lengkap' }),
+        ],
         email: [
           (v) => !!v || 'Email is required',
           (v) => /.+@.+/.test(v) || 'Email invalid',
@@ -75,12 +79,17 @@ export default {
         ],
         password: [
           (v) => !!v || 'Password is required',
-          (v) => v.length >= 6 || 'Password must be at least 6 characters',
+          (v) =>
+            v.length >= 6 ||
+            this.$t('FIELD_MIN', { field: 'Password', min: 6 }),
         ],
         retype_password: [
           (v) =>
             v === this.form.password ||
-            'Re-password must be same with Password',
+            this.$t('FIELD_NOT_MATCH', {
+              field: 'Password',
+              match: 'Re-Password',
+            }),
         ],
       },
     }

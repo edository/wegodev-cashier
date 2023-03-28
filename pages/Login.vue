@@ -41,7 +41,10 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
+  middleware: ['guest'],
   data() {
     return {
       isDisabled: false,
@@ -54,6 +57,11 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('auth', {
+      setFullname: 'setFullname',
+      setAccessToken: 'setAccessToken',
+      setRefreshToken: 'setRefreshToken',
+    }),
     storeWelcomeScreen() {
       localStorage.setItem('welcomeScreen', true)
     },
@@ -63,6 +71,7 @@ export default {
       this.$axios
         .$post('http://localhost:3000/auth/login', this.form)
         .then((response) => {
+          // login success
           this.isDisabled = false
 
           // store passed welcome screen
@@ -70,7 +79,11 @@ export default {
             this.storeWelcomeScreen()
           }
 
-          // console.log(response)
+          // store auth data
+          this.setFullname(response.fullname)
+          this.setAccessToken(response.accessToken)
+          this.setRefreshToken(response.refreshToken)
+
           // redirect to login page
           this.$router.push('/dashboard')
         })
@@ -80,6 +93,13 @@ export default {
           this.isDisabled = false
         })
     },
+  },
+  mounted() {
+    // console.log(this.$route.params.message)
+    if (this.$route.params.message == 'AUTH_REQUIRED') {
+      this.message = this.$route.params.message
+      this.isError = true
+    }
   },
 }
 </script>

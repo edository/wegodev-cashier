@@ -4,8 +4,9 @@ import cookie from 'cookie';
 
 export default ({ store, req }) => {
     createPersistedState({
-        paths: [...],
+        paths: ['auth.access_token', 'auth.refresh_token', 'auth.fullname'],
         storage: {
+            // dijalankan ketika refresh
             getItem: (key) => {
                 // See https://nuxtjs.org/guide/plugins/#using-process-flags
                 if (process.server) {
@@ -16,8 +17,10 @@ export default ({ store, req }) => {
                 }
             },
             // Please see https://github.com/js-cookie/js-cookie#json, on how to handle JSON.
-            setItem: (key, value) =>
-                Cookies.set(key, value, { expires: 365, secure: false }),
+            // dijalankan ketika mengatur item / key value baru
+            setItem: (key, value) => {
+                Cookies.set(key, value, { expires: 365, secure: false })
+            },
             removeItem: key => Cookies.remove(key)
         }
     })(store);
