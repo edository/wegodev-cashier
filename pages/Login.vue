@@ -69,7 +69,7 @@ export default {
       this.isDisabled = true
 
       this.$axios
-        .$post('http://localhost:3000/auth/login', this.form)
+        .$post('/auth/login', this.form)
         .then((response) => {
           // login success
           this.isDisabled = false

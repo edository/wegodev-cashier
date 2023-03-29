@@ -23,12 +23,12 @@ export const actions = {
     commit('updateCategoryId', categoryId)
   },
   fetchProducts({ commit }) {
-    return this.$axios.$get('http://localhost:3000/products').then(response => {
+    return this.$axios.$get('/products').then(response => {
       commit('updateProducts', response.products)
     })
   },
   fetchCategories({ commit }) {
-    return this.$axios.$get('http://localhost:3000/categories').then(response => {
+    return this.$axios.$get('/categories').then(response => {
       commit('updateCategories', response.categories)
     })
   }

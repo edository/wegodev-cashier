@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="10" offset="1">
       <v-card class="mb-2">
-        <v-toolbar color="primary" dark> Create User </v-toolbar>
+        <v-toolbar color="primary" dark> Edit User </v-toolbar>
         <v-card-text>
           <v-breadcrumbs :items="breadcrumbs" class="pa-0"></v-breadcrumbs>
           <v-form ref="form">
@@ -47,7 +47,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn @click="onSubmit()" color="primary" :disabled="isDisabled">
-            <span v-if="!isDisabled">Save</span>
+            <span v-if="!isDisabled">Update</span>
             <!-- loading progress button -->
             <v-progress-circular
               v-else
@@ -64,6 +64,11 @@
 <script>
 export default {
   middleware: ['authenticated'],
+  asyncData({ params }) {
+    return {
+      id: params.id,
+    }
+  },
   data() {
     return {
       breadcrumbs: [
@@ -91,8 +96,9 @@ export default {
           (v) => !this.emailExist || 'Email already exist',
         ],
         password: [
-          (v) => !!v || 'Password is required',
+          //   (v) => !!v || 'Password is required',
           (v) =>
+            v.length == 0 ||
             v.length >= 6 ||
             this.$t('FIELD_MIN', { field: 'Password', min: 6 }),
         ],
@@ -109,6 +115,22 @@ export default {
     }
   },
   methods: {
+    fetchData() {
+      this.$axios
+        .$get(`/users/${this.id}`)
+        .then((response) => {
+          this.form.fullname = response.user.fullname
+          this.form.email = response.user.email
+          this.form.role = response.user.role
+        })
+        .catch((error) => {
+          // redirect to users page
+          this.$router.push({
+            name: 'users___' + this.$i18n.locale,
+            params: { message: 'USER_ID_NOT_FOUND' },
+          })
+        })
+    },
     checkEmailExist() {
       this.emailExist = false
     },
@@ -117,14 +139,14 @@ export default {
         this.isDisabled = true
 
         this.$axios
-          .$post('/users', this.form)
+          .$put(`/users/${this.id}`, this.form)
           .then((response) => {
             this.isDisabled = false
 
             // redirect to users page
             this.$router.push({
               name: 'users___' + this.$i18n.locale,
-              params: { message: 'USER_CREATED', fullname: this.form.fullname },
+              params: { message: 'USER_UPDATED', fullname: this.form.fullname },
             })
           })
           .catch((error) => {
@@ -139,6 +161,9 @@ export default {
           })
       }
     },
+  },
+  mounted() {
+    this.fetchData()
   },
 }
 </script>

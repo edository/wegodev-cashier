@@ -18,7 +18,7 @@
               type="email"
               v-model="form.email"
               :rules="rules.email"
-              @keyup="checkEmail()"
+              @keydown="checkEmailExist"
             />
             <v-text-field
               name="password"
@@ -95,30 +95,32 @@ export default {
     }
   },
   methods: {
-    checkEmail() {
-      this.$axios
-        .$post('http://localhost:3000/auth/check-email', this.form)
-        .then((response) => {
-          this.emailExist = false
-        })
-        .catch((error) => {
-          this.emailExist = true
-        })
+    checkEmailExist() {
+      this.emailExist = false
     },
     onSubmit() {
-      this.isDisabled = true
+      if (this.$refs.form.validate()) {
+        this.isDisabled = true
 
-      this.$axios
-        .$post('http://localhost:3000/auth/register', this.form)
-        .then((response) => {
-          this.isDisabled = false
+        this.$axios
+          .$post('/auth/register', this.form)
+          .then((response) => {
+            this.isDisabled = false
 
-          // redirect to login page
-          this.$router.push('/login')
-        })
-        .catch((error) => {
-          this.isDisabled = false
-        })
+            // redirect to login page
+            this.$router.push('/login')
+          })
+          .catch((error) => {
+            if (error.response.data.message == 'EMAIL_EXIST') {
+              this.emailExist = true
+
+              // ini digunakan karena bug vuetify validasi rules email exist
+              // digunakan bersamaan dengan v-form ref="form"
+              this.$refs.form.validate()
+            }
+            this.isDisabled = false
+          })
+      }
     },
   },
 }

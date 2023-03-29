@@ -3,6 +3,11 @@
     "EMAIL_INVALID": "Format email tidak valid",
     "FIELD_MIN": "{field} minimal {min} karakter",
     "FIELD_NOT_MATCH": "Isi {match} tidak sama dengan {field}",
+
+    "USER_CREATED": "User {title} berhasil dibuat",
+    "USER_DELETED": "Berhasil menghapus data {title}",
+    "USER_UPDATED": "Update data {title} berhasil diperbarui",
+    "USER_ID_NOT_FOUND": "ID user tidak ditemukan",
     
     "EMAIL_NOT_FOUND": "Email tidak ditemukan",
     "WRONG_PASSWORD": "Password yang anda masukkan salah",
