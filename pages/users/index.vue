@@ -36,6 +36,7 @@
               itemsPerPageOptions: [10, 25, 50],
             }"
           >
+            <!-- modal delete data -->
             <template v-slot:top>
               <v-dialog v-model="dialogDelete" max-width="500px">
                 <v-card>
@@ -59,6 +60,7 @@
               </v-dialog>
             </template>
 
+            <!-- trigger button modal -->
             <template v-slot:item.actions="{ item }">
               <v-btn :to="`/users/edit/${item._id}`" icon>
                 <v-icon small>mdi-pencil</v-icon>
