@@ -38,14 +38,13 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn @click="onSubmit()" color="primary" :disabled="isDisabled">
-            <span v-if="!isDisabled">Register</span>
-            <!-- loading progress button -->
-            <v-progress-circular
-              v-else
-              color="primary"
-              indeterminate
-            ></v-progress-circular>
+          <v-btn
+            @click="onSubmit()"
+            color="primary"
+            :disabled="isDisabled"
+            :loading="isDisabled"
+          >
+            Register
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -57,6 +56,9 @@
 <script>
 export default {
   middleware: ['guest'],
+  head: {
+    title: 'Register',
+  },
   data() {
     return {
       emailExist: false,

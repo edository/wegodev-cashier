@@ -9,8 +9,8 @@ export default {
   
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - wegodev-cashier',
-    title: 'wegodev-cashier',
+    titleTemplate: '%s - Cashier',
+    title: 'Cashier',
     htmlAttrs: {
       lang: 'en',
     },

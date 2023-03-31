@@ -24,14 +24,21 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn @click="onSubmit()" color="primary" :disabled="isDisabled">
+          <!-- <v-btn @click="onSubmit()" color="primary" :disabled="isDisabled">
             <span v-if="!isDisabled">Login</span>
-            <!-- loading progress button -->
             <v-progress-circular
               v-else
               color="primary"
               indeterminate
             ></v-progress-circular>
+          </v-btn> -->
+          <v-btn
+            @click="onSubmit()"
+            color="primary"
+            :disabled="isDisabled"
+            :loading="isDisabled"
+          >
+            Login
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -45,6 +52,9 @@ import { mapMutations } from 'vuex'
 
 export default {
   middleware: ['guest'],
+  head: {
+    title: 'Login',
+  },
   data() {
     return {
       isDisabled: false,
